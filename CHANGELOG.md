@@ -1,5 +1,16 @@
 # Changelog
 
+- v1.7.10 - Bugfix: stringify bug causing `null` to be 'null'
+- v1.7.9 - 
+  - Add options to formRender
+    + `render` : defaults to `true`, will not render the html fields if set false.
+    + `notify` : Allows you to define your own handler for notifications. defaults to console.log, console.warn and console.error.
+  - Set form field data to template element to be used by other modules.
+- v1.7.8 - Add fontello fonts with config and Makefile for editing icons.
+- v1.7.7
+  - Bugfix: Close button doesn't close #71
+  - Bugfix: max-length attribute should be maxlength #70
+  - Chore: Add gulp plumber to build process to catch errors instead of fail build.
 - v1.7.6 - Bugfix: radio and checkbox group options without values cause formRender error.
 - v1.7.5
   - Bugfix: Multiple selection bug for checkbox group and radio group fields. [#66](https://github.com/kevinchappell/formBuilder/pull/66)
