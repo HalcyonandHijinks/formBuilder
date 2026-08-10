@@ -1,14 +1,20 @@
 {
   "name": "formBuilder",
-  "version": "1.8.1",
-  "main": [
-    "dist/*"
+  "version": "3.23.1",
+  "main": "dist/form-builder.min.js",
+  "homepage": "https://formbuilder.online/",
+  "repository": {
+    "url": "https://github.com/kevinchappell/formBuilder.git",
+    "type": "git"
+  },
+  "files": [
+    "dist/**/*",
+    "docs/**/*",
+    "src/**/*"
   ],
-  "homepage": "http://kevinchappell.github.io/formBuilder/",
-  "repository": "kevinchappell/formBuilder",
-  "authors": [
-    "Kevin Chappell <kevin.b.chappell@gmail.com>"
-  ],
+  "author": "Kevin Chappell <kevin.b.chappell@gmail.com>",
+  "contributors": [],
+  "bugs": "https://github.com/kevinchappell/formBuilder/issues",
   "description": "A jQuery plugin for drag and drop form building",
   "keywords": [
     "jquery-plugin",
@@ -28,53 +34,169 @@
       "test": [
         "test/**/*.spec.js"
       ],
+      "pluginsDir": "src/js/control_plugins/",
+      "fonts": "src/fonts",
+      "sass": "src/sass",
       "formBuilder": {
-        "js": [
-          "src/js/kc-toggle.js",
-          "src/js/form-builder.js",
-          "src/js/to-xml.js"
-        ],
-        "fonts": "src/fonts/fontello",
-        "sass": ["src/sass/form-builder.scss"]
+        "js": "src/js/form-builder.js",
+        "sass": [
+          "src/sass/form-builder.scss"
+        ]
       },
       "formRender": {
-        "js": [
-          "src/js/kc-toggle.js",
-          "src/js/form-render.js"
-        ],
-        "sass": ["src/sass/form-render.scss"]
+        "js": "src/js/form-render.js",
+        "sass": [
+          "src/sass/form-render.scss"
+        ]
       },
-      "demoSass": [
-        "demo/assets/sass/demo.scss"
+      "site": [
+        "demo/assets/sass/site.scss"
       ]
     },
-    "fontServer": "http://fontello.com"
-    },
+    "fontServer": "https://fontello.com",
+    "fontelloToken": "09d648f01d6c57cb9f9b8cc55043e0c0"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "browsers": [
+              "> 1%"
+            ]
+          },
+          "loose": true
+        }
+      ]
+    ],
+    "comments": false,
+    "plugins": []
+  },
   "scripts": {
-    "prestart": "npm update",
-    "test": "gulp test"
+    "build:analyze": "vite-bundle-visualizer --config vite.config.lib.js",
+    "build:plugins": "babel-node tools/build-plugins.js",
+    "build:vendor": "babel-node tools/build-vendor",
+    "build": "npm run build:lib:min && npm run build:lib:unmin && npm run compress",
+    "build:lib:min": "LIB_ENTRY=form-builder vite build --config vite.config.lib.js && LIB_ENTRY=form-render vite build --config vite.config.lib.js",
+    "build:lib:unmin": "LIB_ENTRY=form-builder vite build --mode unminified --config vite.config.lib.js && LIB_ENTRY=form-render vite build --mode unminified --config vite.config.lib.js",
+    "build:all": "run-s build:plugins build:vendor build copy",
+    "compress": "babel-node tools/compress.js",
+    "copy": "cp -a dist/* demo/assets/js/ && cp CONTRIBUTING.md docs/contributing.md && cp LICENSE docs/license.md && npm run copy:lang",
+    "copy:lang": "babel-node tools/copy-language-files",
+    "deploy:all": "run-s deploy:demo deploy:site",
+    "deploy:demo": "node tools/deploy-demo.js",
+    "deploy:site": "node tools/deploy-site.js",
+    "docs:build": "docker build --rm -t fb_docs .",
+    "docs:serve": "docker run -v \"$(pwd)/docs/\":/usr/src/app/docs --rm -p 8123:8123 -it fb_docs",
+    "docs": "run-s docs:build docs:serve",
+    "font": "babel-node tools/icon-font",
+    "lint": "eslint ./src || true",
+    "lint:fix": "eslint ./src --fix",
+    "semantic-release": "semantic-release",
+    "start": "run-s build:vendor copy:lang && vite --config vite.config.demo.js",
+    "dev": "npm run start",
+    "test": "vitest run --coverage",
+    "prepare": "[ \"$NODE_ENV\" = production ] && exit 0; husky install",
+    "pre-commit": "lint-staged"
+  },
+  "dependencies": {
+    "jquery": ">=3.4.1",
+    "jquery-ui-sortable": "*",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "babel-core": "^5.8.25",
-    "browser-sync": "^2.8.0",
-    "codeclimate-test-reporter": "^0.1.0",
-    "gulp": "^3.9.0",
-    "gulp-autoprefixer": "^2.3.1",
-    "gulp-babel": "^5.2.1",
-    "gulp-base64": "^0.1.3",
-    "gulp-bump": "^0.3.1",
-    "gulp-concat": "^2.6.0",
-    "gulp-cssmin": "^0.1.7",
-    "gulp-filter": "^3.0.0",
-    "gulp-git": "^1.2.4",
-    "gulp-header": "^1.2.2",
-    "gulp-jshint": "^1.11.2",
-    "gulp-load-plugins": "^0.10.0",
-    "gulp-plumber": "^1.1.0",
-    "gulp-sass": "^2.0.4",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-tag-version": "^1.3.0",
-    "gulp-uglify": "^1.2.0",
-    "jshint-stylish": "^2.0.1"
+    "@babel/cli": "^7.24.7",
+    "@babel/core": "^7.24.7",
+    "@babel/eslint-parser": "^7.24.7",
+    "@babel/node": "^7.24.7",
+    "@babel/preset-env": "^7.24.7",
+    "@commitlint/cli": "^18.4.3",
+    "@commitlint/config-conventional": "^18.4.3",
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.6.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/npm": "13.1.5",
+    "@vitest/coverage-v8": "^4.1.9",
+    "autoprefixer": "^10.4.16",
+    "clui": "^0.3.6",
+    "colors": "^1.4.0",
+    "concat-files": "^0.1.1",
+    "cross-env": "^7.0.2",
+    "dompurify": "^3.0.6",
+    "eslint": "^9.6.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "formbuilder-languages": "latest",
+    "fs-extra": "^9.0.1",
+    "globals": "^15.7.0",
+    "husky": "^8.0.3",
+    "inquirer": "13.4.2",
+    "jsdom": "^29.1.1",
+    "lint-staged": "^15.2.0",
+    "mi18n": "^0.4.8",
+    "npm-run-all": "^4.1.5",
+    "opener": "^1.5.1",
+    "quill": "2.0.3",
+    "rateyo": "2.3.5",
+    "replace-in-file": "^6.1.0",
+    "sass": "^1.49.9",
+    "semantic-release": "25.0.3",
+    "semver": "^7.3.2",
+    "storage-available": "^1.1.0",
+    "tinymce": "8.6.0",
+    "unzipper": "^0.12.1",
+    "vite": "^8.0.16",
+    "vite-bundle-visualizer": "^1.2.1",
+    "vite-plugin-css-injected-by-js": "5.0.1",
+    "vitest": "^4.1.9"
+  },
+  "engines": {},
+  "release": {
+    "branch": "master",
+    "verifyConditions": [
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/git"
+    ],
+    "prepare": [
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/git"
+    ]
+  },
+  "browserslist": [
+    "defaults"
+  ],
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "npm run lint:fix"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ],
+    "rules": {
+      "type-enum": [
+        2,
+        "always",
+        [
+          "build",
+          "chore",
+          "ci",
+          "docs",
+          "feat",
+          "fix",
+          "perf",
+          "refactor",
+          "revert",
+          "style",
+          "test",
+          "wip"
+        ]
+      ]
+    }
   }
 }
