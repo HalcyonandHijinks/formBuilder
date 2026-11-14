@@ -1,3 +1,10 @@
+## [3.23.6](https://github.com/kevinchappell/formBuilder/compare/v3.23.5...v3.23.6) (2026-11-14)
+
+
+### Bug Fixes
+
+* keep subtype for group types defined in the subtypes option ([#1677](https://github.com/kevinchappell/formBuilder/issues/1677)) ([08ddeee](https://github.com/kevinchappell/formBuilder/commit/08ddeee70a72b6a9feb953e88e1d413c51a23860)), closes [#1415](https://github.com/kevinchappell/formBuilder/issues/1415)
+
 ## [3.23.5](https://github.com/kevinchappell/formBuilder/compare/v3.23.4...v3.23.5) (2026-11-14)
 
 
