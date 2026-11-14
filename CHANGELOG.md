@@ -1,3 +1,10 @@
+## [3.23.7](https://github.com/kevinchappell/formBuilder/compare/v3.23.6...v3.23.7) (2026-11-14)
+
+
+### Bug Fixes
+
+* keep subtype on group fields defined via the subtypes option ([#1678](https://github.com/kevinchappell/formBuilder/issues/1678)) ([b11b7a5](https://github.com/kevinchappell/formBuilder/commit/b11b7a5af30cc1ff177810cfadd243c16b85e6cd)), closes [#1415](https://github.com/kevinchappell/formBuilder/issues/1415)
+
 ## [3.23.6](https://github.com/kevinchappell/formBuilder/compare/v3.23.5...v3.23.6) (2026-11-14)
 
 
